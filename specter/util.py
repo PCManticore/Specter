@@ -103,7 +103,11 @@ def get_source_from_frame(frame):
 
     # for old style classes, getmodule(type(self)) returns __builtin__, and
     # inspect.getfile(__builtin__) throws an exception
-    insp_obj = inspect.getmodule(type(self) if self else cls) or frame.f_code
+    if self is not None:
+        lookup_object = type(self)
+    else:
+        lookup_object = cls
+    insp_obj = inspect.getmodule(lookup_object) or frame.f_code
     if insp_obj == __builtin__:
         insp_obj = frame.f_code
 
